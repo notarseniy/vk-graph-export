@@ -58,7 +58,6 @@ describe("VK friends traversing module", function() {
 				trav.enqueue(starter_id, 1)
 				var onNext = function() {
 					if (!trav.isCompleted()) {
-						console.log("trav: ", trav)
 						trav.next(onNext)
 					} else {
 						done()
@@ -74,8 +73,7 @@ describe("VK friends traversing module", function() {
 			})
 			it("should not have requested any user more than one time", function() {
 				var request_counts = _.countBy(req.requests, "id")
-				console.log(req.requests)
-				console.log(request_counts)
+				chai.expect(_.max(request_counts)).to.be.not.above(1)
 			})
 		})
 	})
