@@ -1,5 +1,5 @@
 
-describe("VK friends traversing module", function() {
+describe("VK friends information module", function() {
 	describe("Graph traverser", function() {
 		var testdata_edges = [
 			[75,76],[75,77],[75,79],[76,77],[76,79],[76,80],
@@ -51,7 +51,7 @@ describe("VK friends traversing module", function() {
 
 		describe("For depth of 1", function() {
 			var req = new Requester()
-			var trav = new vktrav.Traverser(function(id, is_detailed, on_result) {
+			var trav = new vk.Traverser(function(id, is_detailed, on_result) {
 				on_result(req.simulateRequest(id, is_detailed))
 			})
 			it("should complete", function(done) {
@@ -91,7 +91,7 @@ describe("VK friends traversing module", function() {
 		
 		describe("For depth of 2", function() {
 			var req = new Requester()
-			var trav = new vktrav.Traverser(function(id, is_detailed, on_result) {
+			var trav = new vk.Traverser(function(id, is_detailed, on_result) {
 				on_result(req.simulateRequest(id, is_detailed))
 			})
 			it("should complete", function(done) {

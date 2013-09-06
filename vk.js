@@ -1,6 +1,6 @@
-window.vktrav = {}
+window.vk = {}
 
-window.vktrav.Traverser = function(requester) {
+window.vk.Traverser = function(requester) {
 	this.friends = []
 	this.links = {}
 	this.queue = []
@@ -8,7 +8,7 @@ window.vktrav.Traverser = function(requester) {
 	this.requester = requester
 }
 
-window.vktrav.Traverser.prototype.enqueue = function(id, levels) {
+window.vk.Traverser.prototype.enqueue = function(id, levels) {
 	this.queue.push({
 		id: id,
 		levels: levels
@@ -16,7 +16,7 @@ window.vktrav.Traverser.prototype.enqueue = function(id, levels) {
 	this.queued_ids[id] = true
 }
 
-window.vktrav.Traverser.prototype.next = function(onComplete) {
+window.vk.Traverser.prototype.next = function(onComplete) {
 	var request = this.queue.shift()
 	this.queued_ids[request.id] = undefined
 	if (request === undefined) {
@@ -43,6 +43,6 @@ window.vktrav.Traverser.prototype.next = function(onComplete) {
 	return true;
 }
 
-window.vktrav.Traverser.prototype.isCompleted = function() {
+window.vk.Traverser.prototype.isCompleted = function() {
 	return !this.queue.length;
 }
