@@ -213,7 +213,6 @@ describe("VK friends information module", function() {
 		var fake_api = new vk.FakeAPI()
 		it("should contain users", function() {
 			chai.expect(fake_api.users).to.be.not.empty
-			console.log(fake_api)
 		})
 		it("should contain connections", function() {
 			chai.expect(fake_api.connections).to.be.not.empty
