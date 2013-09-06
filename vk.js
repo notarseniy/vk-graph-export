@@ -62,5 +62,29 @@ window.vk.attributes = [
 ]
 
 window.vk.to_graph = function(friends, links, exclude_ids) {
-
+	var friends_filtered = _.filter(friends, function(f) {return !_.contains(exclude_ids, f.id)})
+	var nodes = _.map(friends_filtered, function(f) {
+		return {
+			id: f.id,
+			label: f.first_name + " " + f.last_name,
+			attrs: {
+				first_name: f.first_name,
+				last_name: f.last_name,
+				nickname: f.nickname,
+				screen_name: f.screen_name,
+				sex: f.sex,
+				photo_50: f.photo_50,
+				relation: f.relation,
+				country: f.country,
+				city: f.city,
+				bdate: f.bdate,
+				timezone: f.timezone
+			}
+		}
+	})
+	return {
+		nodes: nodes,
+		edges: null,
+		attribute_conf: window.vk.attributes
+	}
 }
