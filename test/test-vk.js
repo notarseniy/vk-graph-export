@@ -191,7 +191,7 @@ describe("VK friends information module", function() {
 					chai.expect(node.attrs.first_name).to.equal("Fgsfds")
 					chai.expect(node.attrs.last_name).to.equal("Lastname")
 					chai.expect(node.attrs.nickname).to.equal("Ololosha")
-					chai.expect(node.attrs.screen_name).to.equal("tetetest_"+node.attrs.id)
+					chai.expect(node.attrs.screen_name).to.equal("tetetest_"+node.id)
 					chai.expect(node.attrs.sex).to.equal(1)
 					chai.expect(node.attrs.photo_50).to.equal("http://cs234765.vk.me/v45384574/5be7/CCDHDC_xw.jpg")
 				})
