@@ -157,7 +157,7 @@ describe("VK friends information module", function() {
 				chai.expect(result).to.have.keys('nodes', 'edges', 'attribute_conf')
 			})
 			it("should have 5 nodes", function() {
-				chai.expect(result.nodes).to.have.length(3)
+				chai.expect(result.nodes).to.have.length(5)
 			})
 			it("should have 2 x 6 = 12 edges", function() {
 				chai.expect(result.edges).to.have.length(2*6)
