@@ -117,12 +117,12 @@ window.vk.requester = function(id, is_detailed, on_result) {
 	}
 
 	VK.api("friends.get", {fields: fields}, function (data) {
-		if(data.response.items !== undefined) {
+		if(data.response !== undefined) {
 			var items
 			if (!is_detailed) {
-				items = _.map(data.response.items, function(id) {return {id: id}})
+				items = _.map(data.response, function(id) {return {id: id}})
 			} else {
-				items = data.response.items
+				items = data.response
 			}
 			on_result(items)
 		} else {
