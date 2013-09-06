@@ -196,6 +196,11 @@ describe("VK friends information module", function() {
 					chai.expect(node.attrs.photo_50).to.be("http://cs234765.vk.me/v45384574/5be7/CCDHDC_xw.jpg")
 				})
 			})
+			it("should return correct attributes configuration", function() {
+				_.each(result.attribute_conf, function(c) {
+					chai.expect(c).to.have.keys(['id', 'title', 'type'])
+				})
+			})
 		})
 	})
 })
