@@ -32,10 +32,12 @@ window.format_to_gexf = function(nodes, edges, attribute_conf) {
 
 			xw.writeStartElement("attvalues")
 			_.each(node.attrs, function(value, key) {
-				xw.writeStartElement("attvalue")
-				xw.writeAttributeString("for", attrmap[key].id)
-				xw.writeAttributeString("value", value.toString())
-				xw.writeEndElement()
+				if (value !== undefined && value !== null) {
+					xw.writeStartElement("attvalue")
+					xw.writeAttributeString("for", attrmap[key].id)
+					xw.writeAttributeString("value", value.toString())
+					xw.writeEndElement()
+				}
 			})
 			xw.writeEndElement()
 
