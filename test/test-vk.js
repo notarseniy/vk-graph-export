@@ -208,4 +208,22 @@ describe("VK friends information module", function() {
 			})
 		})
 	})
+
+	describe("Fake API", function() {
+		var fake_api = new vk.FakeAPI()
+		it("should contain users", function() {
+			chai.expect(fake_api.users).to.be.not.empty
+			console.log(fake_api)
+		})
+		it("should contain connections", function() {
+			chai.expect(fake_api.connections).to.be.not.empty
+		})
+		it("should return friends for fake users", function() {
+			for(var i=0; i<100; i++) {
+				var id = _.random(1, fake_api.num_fake_users)
+				var friends = fake_api.getFriends(id, _.random(0, 1))
+				chai.expect(friends).to.be.instanceOf(Array)
+			}
+		})
+	})
 })

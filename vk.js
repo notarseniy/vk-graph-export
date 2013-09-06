@@ -130,3 +130,58 @@ window.vk.requester = function(id, is_detailed, on_result) {
 		}
 	});
 }
+
+window.vk.FakeAPI = function() {
+	this.num_fake_users = 1000
+	var num_connections = 20000
+	this.users = {}
+	this.connections = {}
+	for(var i=1; i<=this.num_fake_users; i++) {
+		this.users[i] = this.createFakeUser(i)
+		this.connections[i] = []
+	}
+
+	for(var ci=1; i<num_connections; i++) {
+		var source = _.random(1, this.num_fake_users)
+		var target = _.random(1, this.num_fake_users)
+		if (source == target) { continue }
+		this.createConnection(source, target)
+		this.createConnection(target, source)
+	}
+}
+
+window.vk.FakeAPI.prototype.createConnection = function(source, target) {
+	if (!_.contains(this.connections[source], target)) {
+		this.connections[source].push(target)
+	}
+}
+
+window.vk.FakeAPI.prototype.createFakeUser = function(id) {
+	return {
+		bdate: "20.10.1991",
+		city: _.random(1, 1000).toString(),
+		country: _.random(1,3).toString(),
+		first_name: Math.random().toString(36).slice(2),
+		home_phone: "+728346763254",
+		id: id,
+		last_name: Math.random().toString(36).slice(2),
+		nickname: Math.random().toString(36).slice(2),
+		online: 1,
+		photo_50: "http://cs234765.vk.me/v45384574/5be7/CCDHDC_xw.jpg",
+		relation: _.random(1,7).toString(),
+		relation_partner: {},
+		screen_name: Math.random().toString(36).slice(2),
+		sex: _.random(1,2),
+		timezone: _.random(-5, 5),
+	}
+}
+
+window.vk.FakeAPI.prototype.getFriends = function(id, is_detailed) {
+	return _.map(this.connections[id], function(id) {
+		if (is_detailed) {
+			return this.users[id]
+		} else {
+			return {id: this.users[id].id}
+		}
+	}, this)
+}
