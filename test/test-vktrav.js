@@ -130,6 +130,9 @@ describe("VK friends traversing module", function() {
 				chai.expect(_.map(_.filter(req.requests, function(r) {return !r.is_detailed}), function(r) {return r.id})).
 					to.have.members([81, 82, 83, 85, 86, 92])				
 			})
+			it("should have user 92 with links to 78 and 88", function() {
+				chai.expect(trav.links[92]).to.have.members([78, 88])
+			})
 		})
 	})
 })
