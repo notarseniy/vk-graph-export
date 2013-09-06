@@ -166,7 +166,7 @@ describe("VK friends information module", function() {
 				var edges_simple = _.map(result.edges, function(e) {return [e.source, e.target]})
 				var expected_edges_half = [
 					[75, 78], [75, 77], [75, 79],
-					[77, 78], [77, 75], [77, 79]
+					[77, 78], [78, 79], [77, 79]
 				]
 				var expected_edges = expected_edges_half.concat(_.map(expected_edges_half, function(e) {return [e[1], e[0]]}))
 				chai.expect(edges_simple).to.have.members(expected_edges)
