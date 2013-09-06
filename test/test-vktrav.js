@@ -133,6 +133,9 @@ describe("VK friends traversing module", function() {
 			it("should have user 92 with links to 78 and 88", function() {
 				chai.expect(trav.links[92]).to.have.members([78, 88])
 			})
+			it("should have user 80 with links to 76 and 86", function() {
+				chai.expect(trav.links[80]).to.have.members([76, 86])
+			})
 		})
 	})
 })
