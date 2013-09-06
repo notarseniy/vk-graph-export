@@ -197,6 +197,7 @@ describe("VK friends information module", function() {
 				})
 			})
 			it("should return correct attributes configuration", function() {
+				chai.expect(result.attribute_conf).to.be.not.empty
 				_.each(result.attribute_conf, function(c) {
 					chai.expect(c).to.have.keys(['id', 'title', 'type'])
 				})
