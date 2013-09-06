@@ -169,7 +169,11 @@ describe("VK friends information module", function() {
 					[77, 78], [78, 79], [77, 79]
 				]
 				var expected_edges = expected_edges_half.concat(_.map(expected_edges_half, function(e) {return [e[1], e[0]]}))
-				chai.expect(edges_simple).to.have.members(expected_edges)
+
+				expected_edges = _.sortBy(_.sortBy(expected_edges, "1"), "0")
+				edges_simple = _.sortBy(_.sortBy(edges_simple, "1"), "0")
+
+				chai.expect(edges_simple).to.deep.equal(expected_edges)
 			})
 			it("should have correct ids on edges", function() {
 				var edge_ids = _.uniq(_.map(result.edges, function(e) {return e.id}))
