@@ -44,5 +44,5 @@ window.vktrav.Traverser.prototype.next = function(onComplete) {
 }
 
 window.vktrav.Traverser.prototype.isCompleted = function() {
-	return !!this.queue.length;
+	return !this.queue.length;
 }
