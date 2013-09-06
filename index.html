@@ -10,6 +10,7 @@
       }
     </style>
 
+    <script src="http://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
     <script src="lib/xmlwriter.js"></script>
     <script src="lib/underscore-min.js"></script>
     <script src="lib/knockout-2.3.0.js"></script>
@@ -25,6 +26,10 @@
   </head>
   <body>
     <div id="main" style="width: 600px; background: #fff;" class="container">
+      <div id="fakevk" class="alert alert-danger" data-bind="visible: is_fake_vk">
+      Fake vk.com API active! (Used for testing) Probably there's some problem with vk API or you are viewing this page directly.
+      </div>
+
       <div id="step1" class="screen" data-bind="visible: stage()=='ready'">
         <p>Export friends graph to <a href="http://gexf.net/format/" target="blank_">GEXF</a> format
         (can be processed with <a href="https://gephi.org/" target="blank_">Gephi</a>).
@@ -103,6 +108,10 @@
     <script>
       var model = new vk_graph_export.Model()
       ko.applyBindings(model)
+
+      VK.init(function() {
+        model.vk_init_completed()
+      });
     </script>
   </body>
 </html>
