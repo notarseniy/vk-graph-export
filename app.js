@@ -1,6 +1,7 @@
 
 window.vk_graph_export = {}
 window.vk_graph_export.Model = function() {
+	var self = this
 	this.current_user_id = ko.observable()
 	this.stage = ko.observable("waiting")
 	this.starting_user_id = ko.observable()
@@ -11,15 +12,33 @@ window.vk_graph_export.Model = function() {
 
 	this.num_users_in_queue = ko.observable(0)
 	this.num_users_completed = ko.observable(0)
+
+	this.delay_between_requests = ko.observable(10)
+	this.data = ko.observable(null)
+	this.graph = ko.computed(function(){
+		if (self.data() !== null) {
+			var exclude = self.do_not_include_me() ? [ self.starting_user_id() ] : []
+			return vk.to_graph(self.data().friends, self.data().links, exclude)
+		}
+	})
+
 	this.num_users_in_graph = ko.computed(function() {
-		return 0;
+		if (self.graph() !== undefined) {
+			return self.graph().nodes.length;
+		}
 	})
 
 	this.download_data_url = ko.computed(function() {
-		return "blah";
+		if (self.graph() !== undefined) {
+			var graph = self.graph()
+			var gexf = format_to_gexf(graph.nodes, graph.edges, graph.attribute_conf)
+			return "data:application/gexf+xml;charset=utf-8;base64,"+btoa(gexf)
+		} else {
+			return ""
+		}
 	})
 	this.download_filename = ko.computed(function() {
-		return "lolka";
+		return "lolka.gexf";
 	})
 
 	this.resetStartingUserToMe = function() {
@@ -27,7 +46,22 @@ window.vk_graph_export.Model = function() {
 	}
 
 	this.start = function() {
-
+		var trav = new vk.Traverser(this.requester)
+		trav.enqueue(self.starting_user_id(), self.depth())
+		var onNext = function() {
+			if (!trav.isCompleted()) {
+				self.num_users_in_queue(trav.queue.length)
+				self.num_users_completed(trav.friends.length)
+				setTimeout(function() {trav.next(onNext)}, self.delay_between_requests())
+			} else {
+				self.data({
+					friends: trav.friends, 
+					links: trav.links
+				})
+				self.stage("completed")
+			}
+		}
+		trav.next(onNext)
 		this.stage("loading")
 	}
 
