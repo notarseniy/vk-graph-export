@@ -27,7 +27,7 @@ window.vktrav.Traverser.prototype.next = function(onComplete) {
 	var z = this
 	this.requester(request.id, nonleaf, function(items) {
 		if (nonleaf) {
-			z.friends = items.concat(z.queue)
+			z.friends = items.concat(z.friends)
 		}
 		z.links[request.id] = _.map(items, function(i) {return i.id})
 
