@@ -51,7 +51,7 @@ window.vk_graph_export.Model = function() {
 		var onNext = function() {
 			if (!trav.isCompleted()) {
 				self.num_users_in_queue(trav.queue.length)
-				self.num_users_completed(trav.friends.length)
+				self.num_users_completed(_.keys(trav.links).length)
 				setTimeout(function() {trav.next(onNext)}, self.delay_between_requests())
 			} else {
 				self.data({
