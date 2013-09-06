@@ -188,12 +188,12 @@ describe("VK friends information module", function() {
 				_.each(result.nodes, function(node) {
 					chai.expect(node.attrs).to.have.keys(['first_name', 'last_name', 'nickname', 'screen_name', 'sex', 'photo_50', 'relation', 'country', 'city', 'bdate', 'timezone'])
 
-					chai.expect(node.attrs.first_name).to.be("Fgsfds")
-					chai.expect(node.attrs.last_name).to.be("Lastname")
-					chai.expect(node.attrs.nickname).to.be("Ololosha")
-					chai.expect(node.attrs.screen_name).to.be("tetetest_"+node.attrs.id)
-					chai.expect(node.attrs.sex).to.be(1)
-					chai.expect(node.attrs.photo_50).to.be("http://cs234765.vk.me/v45384574/5be7/CCDHDC_xw.jpg")
+					chai.expect(node.attrs.first_name).to.equal("Fgsfds")
+					chai.expect(node.attrs.last_name).to.equal("Lastname")
+					chai.expect(node.attrs.nickname).to.equal("Ololosha")
+					chai.expect(node.attrs.screen_name).to.equal("tetetest_"+node.attrs.id)
+					chai.expect(node.attrs.sex).to.equal(1)
+					chai.expect(node.attrs.photo_50).to.equal("http://cs234765.vk.me/v45384574/5be7/CCDHDC_xw.jpg")
 				})
 			})
 			it("should return correct attributes configuration", function() {
