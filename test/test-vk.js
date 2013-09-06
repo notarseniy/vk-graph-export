@@ -172,7 +172,7 @@ describe("VK friends information module", function() {
 				chai.expect(edges_simple).to.have.members(expected_edges)
 			})
 			it("should have correct ids on edges", function() {
-				var edge_ids = _.unuq(_.map(result.edges, function(e) {return e.id}))
+				var edge_ids = _.uniq(_.map(result.edges, function(e) {return e.id}))
 				chai.expect(edge_ids).to.have.length(2*6)
 				_.each(edge_ids, function(id) {chai.expect(id).to.be.a("number")})
 			})
