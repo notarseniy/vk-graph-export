@@ -129,6 +129,7 @@ window.vk.requester = function(id, is_detailed, on_result) {
 			}
 			on_result(items)
 		} else {
+			// todo: handle error 15: user deactivated
 			console.error("Received error: ", data)
 		}
 	});
