@@ -104,8 +104,6 @@ describe("GEXF writer", function() {
 	]
 
 	var result = format_to_gexf(nodes, edges, attribute_conf)
-	console.log("r:",result)
-	console.log("s:",xml_sample)
 
 	it("should dump some gexf from graph data", function() {
 		chai.expect(result).to.be.a('string')
