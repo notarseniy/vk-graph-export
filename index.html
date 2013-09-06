@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      .screen {
+        height: 500px;
+      }
+    </style>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="main" style="width: 600px; background: #fff;" class="container">
+      <div id="step1" class="screen">
+        <p>Export friends graph to <a href="http://gexf.net/format/" target="blank_">GEXF</a> format
+        (can be processed with <a href="https://gephi.org/" target="blank_">Gephi</a>).
+        </p>
+
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="user-id" class="col-xs-4 control-label">User ID</label>
+            <div class="input-group col-xs-8">
+              <input id="user-id" type="number" class="form-control">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Me</button>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="depth" class="col-xs-4 control-label">Traversing Depth</label>
+            <div class="col-xs-8">
+              <select class="form-control">
+                <option value="1">1 (your friends)</option>
+                <option value="2">2 (your friends and friends of friends - lots of data!)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-xs-4"></div>
+            <div class="col-xs-8">
+              <button type="submit" class="btn btn-primary">Start</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div id="step2" class="screen">
+        <p>Loading data</p>
+        <div class="row" style="height: 60px;">
+          <div class="col-xs-6">
+            Users in queue: <span class="badge">0</span>
+          </div>
+          <div class="col-xs-6">
+            Users loaded: <span class="badge">0</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <button class="btn btn-danger">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="step3" class="screen">
+        <p>Data load completed, you can now download GEXF file.</p>
+        <p>Users in graph: <span class="badge">0</span></p>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="checkbox">
+                <label>
+                  <input type="checkbox"> Do not include me (or starting user) in graph
+                  (recommended)
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <a href="#" class="btn btn-primary">Download .gexf</a>
+          </div>
+          <div class="col-xs-6">
+            <button class="btn btn-warning">Run again with different parameters</button>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </body>
+</html>
