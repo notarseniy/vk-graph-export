@@ -94,7 +94,7 @@ window.vk.to_graph = function(friends, links, exclude_ids) {
 				edge_id++
 				edges.push({
 					id: edge_id,
-					source: source,
+					source: parseInt(source),
 					target: target
 				})
 			})
