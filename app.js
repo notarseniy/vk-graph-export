@@ -13,7 +13,7 @@ window.vk_graph_export.Model = function() {
 	this.num_users_in_queue = ko.observable(0)
 	this.num_users_completed = ko.observable(0)
 
-	this.delay_between_requests = ko.observable(10)
+	this.delay_between_requests = ko.observable(1000)
 	this.data = ko.observable(null)
 	this.graph = ko.computed(function(){
 		if (self.data() !== null) {
