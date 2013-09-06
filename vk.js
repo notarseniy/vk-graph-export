@@ -107,3 +107,26 @@ window.vk.to_graph = function(friends, links, exclude_ids) {
 		attribute_conf: window.vk.attributes
 	}
 }
+
+window.vk.requester = function(id, is_detailed, on_result) {
+	var fields;
+	if (is_detailed) {
+		fields = "nickname, screen_name, sex, bdate, city, country, timezone, photo_50, contacts, relation"
+	} else {
+		fields = ""
+	}
+
+	VK.api("friends.get", {fields: "nickname, screen_name, sex, bdate, city, country, timezone, photo_50, contacts, relation"}, function (data) {
+		if(data.response.items !== undefined) {
+			var items
+			if (!is_detailed) {
+				items = _.map(data.response.items, function(id) {return {id: id}})
+			} else {
+				items = data.response.items
+			}
+			on_result(items)
+		} else {
+			console.error("Received error: ", data)
+		}
+	});
+}
