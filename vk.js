@@ -82,9 +82,28 @@ window.vk.to_graph = function(friends, links, exclude_ids) {
 			}
 		}
 	})
+
+	var node_ids = _.object(_.map(nodes, function(n) {return [n.id, true]}))
+
+	var edges = []
+
+	var edge_id = 0
+	_.each(links, function(targets, source) {
+		if (node_ids[source] !== undefined) {
+			_.each(_.filter(targets, function(id) {return node_ids[id] !== undefined}), function(target) {
+				edge_id++
+				edges.push({
+					id: edge_id,
+					source: source,
+					target: target
+				})
+			})
+		}
+	})
+
 	return {
 		nodes: nodes,
-		edges: null,
+		edges: edges,
 		attribute_conf: window.vk.attributes
 	}
 }
