@@ -29,10 +29,14 @@ window.vk_graph_export.Model = function() {
 	})
 
 	this.download_data_url = ko.computed(function() {
+		var utf8_to_b64 = function(str) {
+		    return window.btoa(unescape(encodeURIComponent( str )));
+		}
+
 		if (self.graph() !== undefined) {
 			var graph = self.graph()
 			var gexf = format_to_gexf(graph.nodes, graph.edges, graph.attribute_conf)
-			return "data:application/gexf+xml;charset=utf-8;base64,"+btoa(gexf)
+			return "data:application/gexf+xml;charset=utf-8;base64,"+utf8_to_b64(gexf)
 		} else {
 			return ""
 		}
