@@ -38,8 +38,8 @@ window.vk.Traverser.prototype.next = function(onComplete) {
 				}
 			})
 		}
+		onComplete();
 	})
-	onComplete();
 	return true;
 }
 
