@@ -75,6 +75,61 @@ describe("VK friends traversing module", function() {
 				var request_counts = _.countBy(req.requests, "id")
 				chai.expect(_.max(request_counts)).to.be.not.above(1)
 			})
+			it("should return friends with ids: 75, 77, 78, 79, 80", function() {
+				chai.expect(_.map(trav.friends, function(u) {return u.id})).to.have.members([75, 77, 78, 79, 80])
+			})
+			it("should return friend 80 with connections to 76, 86", function() {
+				chai.expect(trav.links[80]).to.have.members([76, 86])
+			})
+			it("should return friend 79 with connections to 75, 76, 77, 78", function() {
+				chai.expect(trav.links[79]).to.have.members([75, 76, 77, 78])
+			})
+			it("should return friend 78 with connections to 75, 76, 77, 79, 85, 92", function() {
+				chai.expect(trav.links[78]).to.have.members([75, 76, 77, 79, 85, 92])
+			})
+		})
+		
+		describe("For depth of 2", function() {
+			var req = new Requester()
+			var trav = new vktrav.Traverser(function(id, is_detailed, on_result) {
+				on_result(req.simulateRequest(id, is_detailed))
+			})
+			it("should complete", function(done) {
+				trav.enqueue(starter_id, 2)
+				var onNext = function() {
+					if (!trav.isCompleted()) {
+						trav.next(onNext)
+					} else {
+						done()
+					}
+				}
+				trav.next(onNext)
+			})
+			it("should have 12 users found", function() {
+				chai.expect(trav.friends).to.have.length(12)
+			})
+			it("should have found users: 75, 76, 77, 78, 79, 80, 81, 82, 83, 85, 86, 92", function() {
+				var ids = _.map(trav.friends, function(f) {return f.id})
+				chai.expect(ids).to.have.members([75, 76, 77, 78, 79, 80, 81, 82, 83, 85, 86, 92])
+			})
+			it("should have made 1 + 5 + 6 = 12 requests", function() {
+				chai.expect(req.requests).to.have.length(1 + 5 + 6)
+			})
+			it("should not have requested any user more than one time", function() {
+				var request_counts = _.countBy(req.requests, "id")
+				chai.expect(_.max(request_counts)).to.be.not.above(1)
+			})
+			it("should have 12 links records", function() {
+				chai.expect(_.toArray(trav.links)).to.have.length(1 + 5 + 6)
+			})
+			it("should have done detailed requests to users 76; 75, 77, 78, 79, 80", function() {
+				chai.expect(_.map(_.filter(req.requests, function(r) {return r.is_detailed}), function(r) {return r.id})).
+					to.have.members([76, 75, 77, 78, 79, 80])
+			})
+			it("should have done non-detailed requests to users 81, 82, 83, 85, 86, 92", function() {
+				chai.expect(_.map(_.filter(req.requests, function(r) {return !r.is_detailed}), function(r) {return r.id})).
+					to.have.members([81, 82, 83, 85, 86, 92])				
+			})
 		})
 	})
 })
