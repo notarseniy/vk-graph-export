@@ -1,0 +1,22 @@
+# app.yaml for hosting on Google App Engine
+# Uses only static file hosting functionality
+
+application: vk-graph-export
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /lib
+  static_dir: lib
+- url: /lib-test
+  static_dir: lib-test
+- url: /css
+  static_dir: css
+- url: /(.*\.(js|html))
+  static_files: \1
+  upload: (.*\.(js|html))
+- url: /
+  static_files: index.html
+  upload: index.html
