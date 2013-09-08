@@ -42,7 +42,7 @@ window.vk_graph_export.Model = function() {
 		}
 	})
 	this.download_filename = ko.computed(function() {
-		return "lolka.gexf";
+		return "vk-friends-"+self.starting_user_id()+".gexf";
 	})
 
 	this.resetStartingUserToMe = function() {
