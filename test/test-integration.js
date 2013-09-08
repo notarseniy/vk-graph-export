@@ -30,8 +30,8 @@ describe("Integration", function() {
 					gexf = format_to_gexf(graph.nodes, graph.edges, graph.attribute_conf)
 				})
 				it("GEXF should not be empty", function() {
-					chai.expect(gexf).to.be.not.empty
-					chai.expect(gexf).to.be.a("string")
+					expect(gexf).to.be.not.empty
+					expect(gexf).to.be.a("string")
 				})
 			})
 		}

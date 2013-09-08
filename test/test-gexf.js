@@ -106,12 +106,12 @@ describe("GEXF writer", function() {
 	var result = format_to_gexf(nodes, edges, attribute_conf)
 
 	it("should dump some gexf from graph data", function() {
-		chai.expect(result).to.be.a('string')
+		expect(result).to.be.a('string')
 	})
 
 	it("output should match sample xml", function() {
 		var r1 = EquivalentXml.xml(result)
 		var r2 = EquivalentXml.xml(xml_sample)
-		chai.expect(EquivalentXml.isEquivalent(r1, r2)).to.be.true
+		expect(EquivalentXml.isEquivalent(r1, r2)).to.be.true
 	})
 })

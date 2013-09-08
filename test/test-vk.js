@@ -65,26 +65,26 @@ describe("VK friends information module", function() {
 				trav.next(onNext)
 			})
 			it("should have 5 friends", function() {
-				chai.expect(trav.friends).to.have.length(5)
+				expect(trav.friends).to.have.length(5)
 			})
 			it("should have made 6 requests", function() {
-				chai.expect(req.requests).to.have.length(6)
+				expect(req.requests).to.have.length(6)
 			})
 			it("should not have requested any user more than one time", function() {
 				var request_counts = _.countBy(req.requests, "id")
-				chai.expect(_.max(request_counts)).to.be.not.above(1)
+				expect(_.max(request_counts)).to.be.not.above(1)
 			})
 			it("should return friends with ids: 75, 77, 78, 79, 80", function() {
-				chai.expect(_.map(trav.friends, function(u) {return u.id})).to.have.members([75, 77, 78, 79, 80])
+				expect(_.map(trav.friends, function(u) {return u.id})).to.have.members([75, 77, 78, 79, 80])
 			})
 			it("should return friend 80 with connections to 76, 86", function() {
-				chai.expect(trav.links[80]).to.have.members([76, 86])
+				expect(trav.links[80]).to.have.members([76, 86])
 			})
 			it("should return friend 79 with connections to 75, 76, 77, 78", function() {
-				chai.expect(trav.links[79]).to.have.members([75, 76, 77, 78])
+				expect(trav.links[79]).to.have.members([75, 76, 77, 78])
 			})
 			it("should return friend 78 with connections to 75, 76, 77, 79, 85, 92", function() {
-				chai.expect(trav.links[78]).to.have.members([75, 76, 77, 79, 85, 92])
+				expect(trav.links[78]).to.have.members([75, 76, 77, 79, 85, 92])
 			})
 		})
 		
@@ -105,35 +105,35 @@ describe("VK friends information module", function() {
 				trav.next(onNext)
 			})
 			it("should have 12 users found", function() {
-				chai.expect(trav.friends).to.have.length(12)
+				expect(trav.friends).to.have.length(12)
 			})
 			it("should have found users: 75, 76, 77, 78, 79, 80, 81, 82, 83, 85, 86, 92", function() {
 				var ids = _.map(trav.friends, function(f) {return f.id})
-				chai.expect(ids).to.have.members([75, 76, 77, 78, 79, 80, 81, 82, 83, 85, 86, 92])
+				expect(ids).to.have.members([75, 76, 77, 78, 79, 80, 81, 82, 83, 85, 86, 92])
 			})
 			it("should have made 1 + 5 + 6 = 12 requests", function() {
-				chai.expect(req.requests).to.have.length(1 + 5 + 6)
+				expect(req.requests).to.have.length(1 + 5 + 6)
 			})
 			it("should not have requested any user more than one time", function() {
 				var request_counts = _.countBy(req.requests, "id")
-				chai.expect(_.max(request_counts)).to.be.not.above(1)
+				expect(_.max(request_counts)).to.be.not.above(1)
 			})
 			it("should have 12 links records", function() {
-				chai.expect(_.toArray(trav.links)).to.have.length(1 + 5 + 6)
+				expect(_.toArray(trav.links)).to.have.length(1 + 5 + 6)
 			})
 			it("should have done detailed requests to users 76; 75, 77, 78, 79, 80", function() {
-				chai.expect(_.map(_.filter(req.requests, function(r) {return r.is_detailed}), function(r) {return r.id})).
+				expect(_.map(_.filter(req.requests, function(r) {return r.is_detailed}), function(r) {return r.id})).
 					to.have.members([76, 75, 77, 78, 79, 80])
 			})
 			it("should have done non-detailed requests to users 81, 82, 83, 85, 86, 92", function() {
-				chai.expect(_.map(_.filter(req.requests, function(r) {return !r.is_detailed}), function(r) {return r.id})).
+				expect(_.map(_.filter(req.requests, function(r) {return !r.is_detailed}), function(r) {return r.id})).
 					to.have.members([81, 82, 83, 85, 86, 92])				
 			})
 			it("should have user 92 with links to 78 and 88", function() {
-				chai.expect(trav.links[92]).to.have.members([78, 88])
+				expect(trav.links[92]).to.have.members([78, 88])
 			})
 			it("should have user 80 with links to 76 and 86", function() {
-				chai.expect(trav.links[80]).to.have.members([76, 86])
+				expect(trav.links[80]).to.have.members([76, 86])
 			})
 		})
 	})
@@ -154,13 +154,13 @@ describe("VK friends information module", function() {
 			var result = vk.to_graph(friends, links, [starter_id])
 
 			it("should contain keys: nodes, edges, attribute_conf", function() {
-				chai.expect(result).to.have.keys('nodes', 'edges', 'attribute_conf')
+				expect(result).to.have.keys('nodes', 'edges', 'attribute_conf')
 			})
 			it("should have 5 nodes", function() {
-				chai.expect(result.nodes).to.have.length(5)
+				expect(result.nodes).to.have.length(5)
 			})
 			it("should have 2 x 6 = 12 edges", function() {
-				chai.expect(result.edges).to.have.length(2*6)
+				expect(result.edges).to.have.length(2*6)
 			})
 			it("should have correct set of edges", function() {
 				var edges_simple = _.map(result.edges, function(e) {return [e.source, e.target]})
@@ -173,37 +173,37 @@ describe("VK friends information module", function() {
 				expected_edges = _.sortBy(_.sortBy(expected_edges, "1"), "0")
 				edges_simple = _.sortBy(_.sortBy(edges_simple, "1"), "0")
 
-				chai.expect(edges_simple).to.deep.equal(expected_edges)
+				expect(edges_simple).to.deep.equal(expected_edges)
 			})
 			it("should have correct ids on edges", function() {
 				var edge_ids = _.uniq(_.map(result.edges, function(e) {return e.id}))
-				chai.expect(edge_ids).to.have.length(2*6)
-				_.each(edge_ids, function(id) {chai.expect(id).to.be.a("number")})
+				expect(edge_ids).to.have.length(2*6)
+				_.each(edge_ids, function(id) {expect(id).to.be.a("number")})
 			})
 			it("should have nodes with ids 80, 75, 79, 77, 78", function() {
 				var node_ids = _.map(result.nodes, function(n) {return n.id})
-				chai.expect(node_ids).to.have.members([80, 75, 79, 77, 78])
+				expect(node_ids).to.have.members([80, 75, 79, 77, 78])
 			})
 			it("should contain node labels", function() {
 				var node_labels = _.map(result.nodes, function(n) {return n.label})
-				chai.expect(node_labels).to.have.members(["Fgsfds Lastname"])
+				expect(node_labels).to.have.members(["Fgsfds Lastname"])
 			})
 			it("should contain node attributes", function() {
 				_.each(result.nodes, function(node) {
-					chai.expect(node.attrs).to.have.keys(['first_name', 'last_name', 'nickname', 'screen_name', 'sex', 'photo_50', 'relation', 'country', 'city', 'bdate', 'timezone'])
+					expect(node.attrs).to.have.keys(['first_name', 'last_name', 'nickname', 'screen_name', 'sex', 'photo_50', 'relation', 'country', 'city', 'bdate', 'timezone'])
 
-					chai.expect(node.attrs.first_name).to.equal("Fgsfds")
-					chai.expect(node.attrs.last_name).to.equal("Lastname")
-					chai.expect(node.attrs.nickname).to.equal("Ololosha")
-					chai.expect(node.attrs.screen_name).to.equal("tetetest_"+node.id)
-					chai.expect(node.attrs.sex).to.equal(1)
-					chai.expect(node.attrs.photo_50).to.equal("http://cs234765.vk.me/v45384574/5be7/CCDHDC_xw.jpg")
+					expect(node.attrs.first_name).to.equal("Fgsfds")
+					expect(node.attrs.last_name).to.equal("Lastname")
+					expect(node.attrs.nickname).to.equal("Ololosha")
+					expect(node.attrs.screen_name).to.equal("tetetest_"+node.id)
+					expect(node.attrs.sex).to.equal(1)
+					expect(node.attrs.photo_50).to.equal("http://cs234765.vk.me/v45384574/5be7/CCDHDC_xw.jpg")
 				})
 			})
 			it("should return correct attributes configuration", function() {
-				chai.expect(result.attribute_conf).to.be.not.empty
+				expect(result.attribute_conf).to.be.not.empty
 				_.each(result.attribute_conf, function(c) {
-					chai.expect(c).to.have.keys(['id', 'title', 'type'])
+					expect(c).to.have.keys(['id', 'title', 'type'])
 				})
 			})
 		})
@@ -212,16 +212,16 @@ describe("VK friends information module", function() {
 	describe("Fake API", function() {
 		var fake_api = new vk.FakeAPI()
 		it("should contain users", function() {
-			chai.expect(fake_api.users).to.be.not.empty
+			expect(fake_api.users).to.be.not.empty
 		})
 		it("should contain connections", function() {
-			chai.expect(fake_api.connections).to.be.not.empty
+			expect(fake_api.connections).to.be.not.empty
 		})
 		it("should return friends for fake users", function() {
 			for(var i=0; i<100; i++) {
 				var id = _.random(1, fake_api.num_fake_users)
 				var friends = fake_api.getFriends(id, _.random(0, 1))
-				chai.expect(friends).to.be.instanceOf(Array)
+				expect(friends).to.be.instanceOf(Array)
 			}
 		})
 	})
