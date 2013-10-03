@@ -4,8 +4,8 @@ describe("Integration", function() {
 		for(i=1; i<=5; i++) {			
 			describe("Try "+i, function() {
 				var fake_api = new vk.FakeAPI()
-				var trav = new vk.Traverser(function(id, is_detailed, on_result) {
-					var friends = fake_api.getFriends(id, is_detailed)
+				var trav = new vk.Traverser(function(id, type, is_detailed, on_result) {
+					var friends = fake_api.getFriends(id, type, is_detailed)
 					on_result(friends)
 				})
 

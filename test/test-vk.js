@@ -40,7 +40,7 @@ describe("VK friends information module", function() {
 		var Requester = function() {
 			this.requests = []
 		}
-		Requester.prototype.simulateRequest = function(id, is_detailed) {
+		Requester.prototype.simulateRequest = function(id, type, is_detailed) {
 			this.requests.push({id: id, is_detailed: is_detailed})
 			if (friends[id] === undefined) {return []}
 			return _.map(friends[id], function(pairs) {
@@ -50,8 +50,8 @@ describe("VK friends information module", function() {
 
 		describe("For depth of 1", function() {
 			var req = new Requester()
-			var trav = new vk.Traverser(function(id, is_detailed, on_result) {
-				on_result(req.simulateRequest(id, is_detailed))
+			var trav = new vk.Traverser(function(id, type, is_detailed, on_result) {
+				on_result(req.simulateRequest(id, type, is_detailed))
 			})
 			it("should complete", function(done) {
 				trav.enqueue(starter_id, 1)
@@ -90,8 +90,8 @@ describe("VK friends information module", function() {
 		
 		describe("For depth of 2", function() {
 			var req = new Requester()
-			var trav = new vk.Traverser(function(id, is_detailed, on_result) {
-				on_result(req.simulateRequest(id, is_detailed))
+			var trav = new vk.Traverser(function(id, type, is_detailed, on_result) {
+				on_result(req.simulateRequest(id, type, is_detailed))
 			})
 			it("should complete", function(done) {
 				trav.enqueue(starter_id, 2)
