@@ -25,7 +25,7 @@ window.vk.Traverser.prototype.next = function(onComplete) {
 
 	var nonleaf = request.levels>0
 	var z = this
-	this.requester(request.id, nonleaf, function(items) {
+	this.requester(request.id, "user", nonleaf, function(items) {
 		if (nonleaf) {
 			z.friends = _.uniq(items.concat(z.friends), function(f) {return f.id})
 		}
@@ -108,7 +108,7 @@ window.vk.to_graph = function(friends, links, exclude_ids) {
 	}
 }
 
-window.vk.requester = function(id, is_detailed, on_result) {
+window.vk.requester = function(id, type, is_detailed, on_result) {
 	var fields;
 	if (is_detailed) {
 		fields = "nickname, screen_name, sex, bdate, city, country, timezone, photo_50, contacts, relation"
@@ -116,24 +116,37 @@ window.vk.requester = function(id, is_detailed, on_result) {
 		fields = ""
 	}
 
-	VK.api("friends.get", {fields: fields, uid: id}, function (data) {
-		if(data.response !== undefined) {
-			var items
-			if (!is_detailed) {
-				items = _.map(data.response, function(id) {return {id: id}})
-			} else {
-				items = _.map(data.response, function(u) {
-					u.id = u.uid;
-					return u;
-				})
-			}
-			on_result(items)
-		} else {
-			console.error("Received error: ", data)
-			// FIXME: handle error, not just ignore it
-			on_result([])
-		}
-	});
+    if (type == "user") {
+        VK.api("friends.get", {fields: fields, uid: id}, function (data) {
+            if(data.response !== undefined) {
+                var items
+                if (!is_detailed) {
+                    items = _.map(data.response, function(id) {return {id: id}})
+                } else {
+                    items = _.map(data.response, function(u) {
+                        u.id = u.uid;
+                        return u;
+                    })
+                }
+                on_result(items)
+            } else {
+                console.error("Received error: ", data)
+                // FIXME: handle error, not just ignore it
+                on_result([])
+            }
+        });
+    } else if (type == "group") {
+        VK.api("groups.getMembers", {gid: id}, function (data) {
+            if(data.response !== undefined) {
+                var items = _.map(data.response, function(id) {return {id: id}})
+                on_result(items)
+            } else {
+                console.error("Received error: ", data)
+                // FIXME: handle error, not just ignore it
+                on_result([])
+            }
+        })
+    }
 }
 
 window.vk.FakeAPI = function() {

@@ -90,7 +90,7 @@ window.vk_graph_export.Model = function() {
 			this.is_fake_vk(true)
 
 			var fake_api = new vk.FakeAPI()
-			this.requester = function(id, is_detailed, on_result) {
+			this.requester = function(id, type, is_detailed, on_result) {
 				var friends = fake_api.getFriends(id, is_detailed)
 				on_result(friends)
 			}
