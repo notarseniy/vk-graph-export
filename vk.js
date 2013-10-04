@@ -116,55 +116,61 @@ window.vk.requester = function(id, type, is_detailed, on_result) {
 		fields = ""
 	}
 
-    if (type == "user") {
-        VK.api("friends.get", {fields: fields, uid: id}, function (data) {
-            if(data.response !== undefined) {
-                var items
-                if (!is_detailed) {
-                    items = _.map(data.response, function(id) {return {id: id}})
-                } else {
-                    items = _.map(data.response, function(u) {
-                        u.id = u.uid;
-                        return u;
-                    })
-                }
-                on_result(items)
-            } else {
-                console.error("Received error: ", data)
-                // FIXME: handle error, not just ignore it
-                on_result([])
-            }
-        });
-    } else if (type == "group") {
-        VK.api("groups.getMembers", {gid: id}, function (data) {
-            if(data.response !== undefined) {
-                var items = _.map(data.response, function(id) {return {id: id}})
-                on_result(items)
-            } else {
-                console.error("Received error: ", data)
-                // FIXME: handle error, not just ignore it
-                on_result([])
-            }
-        })
-    }
+	if (type == "user") {
+		VK.api("friends.get", {fields: fields, uid: id}, function (data) {
+			if(data.response !== undefined) {
+				var items
+				if (!is_detailed) {
+					items = _.map(data.response, function(id) {return {id: id}})
+				} else {
+					items = _.map(data.response, function(u) {
+						u.id = u.uid;
+						return u;
+					})
+				}
+				on_result(items)
+			} else {
+				console.error("Received error: ", data)
+				// FIXME: handle error, not just ignore it
+				on_result([])
+			}
+		});
+	} else if (type == "group") {
+		VK.api("groups.getMembers", {gid: id}, function (data) {
+			if(data.response !== undefined) {
+				var items = _.map(data.response, function(id) {return {id: id}})
+				on_result(items)
+			} else {
+				console.error("Received error: ", data)
+				// FIXME: handle error, not just ignore it
+				on_result([])
+			}
+		})
+	}
 }
 
 window.vk.FakeAPI = function() {
 	this.num_fake_users = 1000
 	var num_connections = 20000
+	var num_groups = 10
 	this.users = {}
 	this.connections = {}
+	this.groups = {}
 	for(var i=1; i<=this.num_fake_users; i++) {
 		this.users[i] = this.createFakeUser(i)
 		this.connections[i] = []
 	}
 
-	for(var ci=1; i<num_connections; i++) {
+	for(var ci=1; ci<num_connections; ci++) {
 		var source = _.random(1, this.num_fake_users)
 		var target = _.random(1, this.num_fake_users)
 		if (source == target) { continue }
 		this.createConnection(source, target)
 		this.createConnection(target, source)
+	}
+
+	for(var gi=1; gi<=num_groups; gi++) {
+		this.groups[gi] = _.filter(_.range(1, this.num_fake_users+1), function(u) {return _.random(1)})
 	}
 }
 
@@ -194,12 +200,16 @@ window.vk.FakeAPI.prototype.createFakeUser = function(id) {
 	}
 }
 
-window.vk.FakeAPI.prototype.getFriends = function(id, is_detailed) {
-	return _.map(this.connections[id], function(id) {
-		if (is_detailed) {
-			return this.users[id]
-		} else {
-			return {id: this.users[id].id}
-		}
-	}, this)
+window.vk.FakeAPI.prototype.getFriends = function(id, type, is_detailed) {
+	if (type == "user") {
+		return _.map(this.connections[id], function(id) {
+			if (is_detailed) {
+				return this.users[id]
+			} else {
+				return {id: this.users[id].id}
+			}
+		}, this)
+	} else {
+		
+	}
 }
