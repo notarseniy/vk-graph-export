@@ -13,11 +13,13 @@ window.vk.Traverser.prototype.enqueue = function(id, levels) {
 		id: id,
 		levels: levels
 	})
-	this.queued_ids[id] = true
+  this.queued_ids[id] = true;
+  console.log('enqueue', this);
 }
 
 window.vk.Traverser.prototype.next = function(onComplete) {
-  var requests = this.queue.splice(0, 25);
+  console.log('next', this.queue);
+  var requests = this.queue.splice(0, 5);
 	var nonleafs = [];
 
   for (let i = 0; i < requests.length; i++) {
@@ -26,7 +28,9 @@ window.vk.Traverser.prototype.next = function(onComplete) {
     nonleafs.push(request.levels > 0);
   }
 
-  if (requests.length === undefined) {
+  console.log('next.request', requests);
+
+  if (!requests.length) {
 		return false;
 	}
 
@@ -36,16 +40,17 @@ window.vk.Traverser.prototype.next = function(onComplete) {
    */
   //this.requester(request.id, nonleaf, function(items) {
   this.requester(requests, nonleafs, function(items) {
+    console.log('requester: ', items, nonleafs);
     for (var i = 0; i < items.length; i++) {
       if (nonleafs[i]) {
         z.friends = _.uniq(items[i].concat(z.friends), function(f) {return f.id})
       }
-      z.links[request.id] = _.map(items[i], function(i) {return i.id})
+      z.links[requests[i].id] = _.map(items[i], function(i) {return i.id})
 
       if (nonleafs[i]) {
         _.each(items[i], function(item) {
           if (!z.queued_ids[item.id] && !z.links[item.id]) {
-            z.enqueue(item.id, request.levels-1)
+            z.enqueue(item.id, requests[i].levels-1)
           }
         })
       }
@@ -125,14 +130,16 @@ window.vk.requester = function(requests, is_detailed, on_result) {
   var code = ('' + function () {
     var fields;
     var args = [__ARGS__];
+    var is_detailed = [__DETAILED__];
     var results = [];
     var i = 0;
-    if (request.levels > 0) {
-      fields = "nickname, screen_name, sex, bdate, city, country, timezone, photo_50, contacts, relation";
-    } else {
-      fields = "";
-    }
+    
     while (i<args.length) {
+      if (is_detailed[i]) {
+        fields = "nickname, screen_name, sex, bdate, city, country, timezone, photo_50, contacts, relation";
+      } else {
+        fields = "";
+      }
       results.push(API.friends.get({fields:fields, uid: args[i]}));
 
       i = i + 1;
@@ -142,15 +149,18 @@ window.vk.requester = function(requests, is_detailed, on_result) {
   code = code.replace('function () {', '');
   code = code.slice(0, code.length - 1);
   code = code.replace('__ARGS__', requests.map(function (el) { return el.id; }));
+  code = code.replace('__DETAILED__', is_detailed);
 
-	VK.api("execute", {code: code}, function (data) {
+  console.log('HEY', code, requests);
+  VK.api("execute", {code: code}, function (data) {
+    console.log('execute', data, is_detailed);
 		if(data.response !== undefined) {
       var items = [];
-      for (var i = 0; i < data.length; i++) {
+      for (var i = 0; i < data.response.length; i++) {
         if (!is_detailed[i]) {
-          items.push(_.map(data[i].response, function(id) {return {id: id}}));
+          items.push(_.map(data.response[i], function(id) {return {id: id}}));
         } else {
-          items.push(_.map(data[i].response, function(u) {
+          items.push(_.map(data.response[i], function(u) {
             u.id = u.uid;
             return u;
           }));
