@@ -19,7 +19,7 @@ window.vk.Traverser.prototype.enqueue = function(id, levels) {
 
 window.vk.Traverser.prototype.next = function(onComplete) {
   console.log('next', this.queue);
-  var requests = this.queue.splice(0, 5);
+  var requests = this.queue.splice(0, 25);
 	var nonleafs = [];
 
   for (let i = 0; i < requests.length; i++) {
