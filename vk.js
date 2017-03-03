@@ -17,27 +17,39 @@ window.vk.Traverser.prototype.enqueue = function(id, levels) {
 }
 
 window.vk.Traverser.prototype.next = function(onComplete) {
-	var request = this.queue.shift()
-	this.queued_ids[request.id] = undefined
-	if (request === undefined) {
+  var requests = this.queue.splice(0, 25);
+	var nonleafs = [];
+
+  for (let i = 0; i < requests.length; i++) {
+    const request = requests[i];
+    this.queued_ids[request.id] = undefined;
+    nonleafs.push(request.levels > 0);
+  }
+
+  if (requests.length === undefined) {
 		return false;
 	}
 
-	var nonleaf = request.levels>0
-	var z = this
-	this.requester(request.id, nonleaf, function(items) {
-		if (nonleaf) {
-			z.friends = _.uniq(items.concat(z.friends), function(f) {return f.id})
-		}
-		z.links[request.id] = _.map(items, function(i) {return i.id})
+  var z = this
+  /* this.requester
+   * @param {array} requests
+   */
+  //this.requester(request.id, nonleaf, function(items) {
+  this.requester(requests, nonleafs, function(items) {
+    for (var i = 0; i < items.length; i++) {
+      if (nonleafs[i]) {
+        z.friends = _.uniq(items[i].concat(z.friends), function(f) {return f.id})
+      }
+      z.links[request.id] = _.map(items[i], function(i) {return i.id})
 
-		if (nonleaf) {
-			_.each(items, function(item) {
-				if (!z.queued_ids[item.id] && !z.links[item.id]) {
-					z.enqueue(item.id, request.levels-1)
-				}
-			})
-		}
+      if (nonleafs[i]) {
+        _.each(items[i], function(item) {
+          if (!z.queued_ids[item.id] && !z.links[item.id]) {
+            z.enqueue(item.id, request.levels-1)
+          }
+        })
+      }
+    }
 		onComplete();
 	})
 	return true;
@@ -108,26 +120,43 @@ window.vk.to_graph = function(friends, links, exclude_ids) {
 	}
 }
 
-window.vk.requester = function(id, is_detailed, on_result) {
-	var fields;
-	if (is_detailed) {
-		fields = "nickname, screen_name, sex, bdate, city, country, timezone, photo_50, contacts, relation"
-	} else {
-		fields = ""
-	}
+//window.vk.requester = function(id, is_detailed, on_result) {
+window.vk.requester = function(requests, is_detailed, on_result) {
+  var code = ('' + function () {
+    var fields;
+    var args = [__ARGS__];
+    var results = [];
+    var i = 0;
+    if (request.levels > 0) {
+      fields = "nickname, screen_name, sex, bdate, city, country, timezone, photo_50, contacts, relation";
+    } else {
+      fields = "";
+    }
+    while (i<args.length) {
+      results.push(API.friends.get({fields:fields, uid: args[i]}));
 
-	VK.api("friends.get", {fields: fields, uid: id}, function (data) {
+      i = i + 1;
+    }
+    return results;
+  })
+  code = code.replace('function () {', '');
+  code = code.slice(0, code.length - 1);
+  code = code.replace('__ARGS__', requests.map(function (el) { return el.id; }));
+
+	VK.api("execute", {code: code}, function (data) {
 		if(data.response !== undefined) {
-			var items
-			if (!is_detailed) {
-				items = _.map(data.response, function(id) {return {id: id}})
-			} else {
-				items = _.map(data.response, function(u) {
-					u.id = u.uid;
-					return u;
-				})
-			}
-			on_result(items)
+      var items = [];
+      for (var i = 0; i < data.length; i++) {
+        if (!is_detailed[i]) {
+          items.push(_.map(data[i].response, function(id) {return {id: id}}));
+        } else {
+          items.push(_.map(data[i].response, function(u) {
+            u.id = u.uid;
+            return u;
+          }));
+        }
+      }
+			on_result(items);
 		} else {
 			console.error("Received error: ", data)
 			// FIXME: handle error, not just ignore it
